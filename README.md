@@ -1,3 +1,59 @@
+## AntPool Debug Usage
+```
+# start first node0
+nvm use 18
+./ironfish-cli/bin/ironfish start --networkId=2 --port=9001 --bootstrap='' --forceMining --datadir=~/.dev0
+
+# start mining
+nvm use 18
+./ironfish-cli/bin/ironfish miners:start --datadir=~/.dev0 --threads=1
+
+# show block info from node0
+nvm use 18
+./ironfish-cli/bin/ironfish blocks:show 122 -d ~/.dev0
+
+# start second node1
+nvm use 18
+./ironfish-cli/bin/ironfish start --networkId=2 --port=9002 --bootstrap='localhost:9001' --datadir=~/.dev1
+
+# show block info from node1 to check if block synced
+nvm use 18
+./ironfish-cli/bin/ironfish blocks:show 122 -d ~/.dev1
+
+```
+
+Block example
+```
+{
+  "block": {
+    "graffiti": "0000000000000000000000000000000000000000000000000000000000001ed8",
+    "difficulty": "161678",
+    "hash": "00005718e449c0301b3e050e27a86b8d45d3b2cc9cf1efc751f1a0f3a260a497",
+    "previousBlockHash": "0000008e19115b0d91f7e5b85f3c8075cc19c1de5080d8ea6f5451bf57936fb7",
+    "sequence": 145,
+    "timestamp": 1687259877513,
+    "noteSize": 147,
+    "noteCommitment": "4a678f65c2b0c53846892386b45e67661eeefaaa2a9efe4cd111cdd53c010f55",
+    "target": "716189520140750104674544372200843082257759155021960712276608963544286357",
+    "nonce": "0",
+    "transactions": [
+      {
+        "signature": "f663e2d71e232b12ac52fc7946c4a33229d1417d6cc5c1b6e9e805d5bca99965ed041f8c35e400faaa5aefd40ca10719120ce06544484e1237d2bdbca09ba50b",
+        "hash": "14ff14811d9e0901fd8621f6116b8c6ab8530dab85d077988da88a652f833de0",
+        "fee": "-2000000000",
+        "spends": 0,
+        "notes": 1
+      }
+    ]
+  },
+  "metadata": {
+    "main": true,
+    "confirmed": true
+  }
+}
+```
+
+
 ![Iron Fish](https://user-images.githubusercontent.com/767083/113650890-d8414c80-9645-11eb-8f4d-2427fc322ce4.png)
 
 # Iron Fish

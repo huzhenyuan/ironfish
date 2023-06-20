@@ -25,6 +25,8 @@ export type GetBlockResponse = {
     timestamp: number
     noteSize: number
     noteCommitment: string
+    target: string
+    nonce: string
     transactions: Array<{
       fee: string
       hash: string
@@ -61,6 +63,8 @@ export const GetBlockResponseSchema: yup.ObjectSchema<GetBlockResponse> = yup
         timestamp: yup.number().defined(),
         noteSize: yup.number().defined(),
         noteCommitment: yup.string().defined(),
+        target: yup.string().defined(),
+        nonce: yup.string().defined(),
         transactions: yup
           .array(
             yup
@@ -156,7 +160,7 @@ router.register<typeof GetBlockRequestSchema, GetBlockResponse>(
 
     request.end({
       block: {
-        graffiti: BufferUtils.toHuman(header.graffiti),
+        graffiti: header.graffiti.toString('hex'),
         difficulty: header.target.toDifficulty().toString(),
         hash: header.hash.toString('hex'),
         previousBlockHash: header.previousBlockHash.toString('hex'),
@@ -164,6 +168,8 @@ router.register<typeof GetBlockRequestSchema, GetBlockResponse>(
         timestamp: header.timestamp.valueOf(),
         noteSize: header.noteSize,
         noteCommitment: header.noteCommitment.toString('hex'),
+        target: header.target.targetValue.toString(),
+        nonce: header.randomness.toString(),
         transactions: transactions,
       },
       metadata: {

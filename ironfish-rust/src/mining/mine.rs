@@ -18,7 +18,13 @@ pub(crate) fn bytes_lte(a: &[u8], b: &[u8]) -> bool {
 }
 
 fn randomize_header(i: u64, mut header_bytes: &mut [u8]) {
-    header_bytes.write_u64::<BigEndian>(i).unwrap();
+    //header_bytes.write_u64::<BigEndian>(i).unwrap();
+    let bytes = i.to_be_bytes();
+    let offset = header_bytes.len() - 8;
+
+    for i in 0..8 {
+        header_bytes[offset+i] = bytes[i]; // copy bytes to array at offset
+    }
 }
 
 pub(crate) fn mine_batch(

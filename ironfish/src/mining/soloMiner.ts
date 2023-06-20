@@ -192,7 +192,7 @@ export class MiningSoloMiner {
           )}/s`,
         )
 
-        void this.submitWork(miningRequestId, randomness, this.graffiti)
+        void this.submitWork(miningRequestId, randomness)
       }
 
       const hashRate = this.threadPool.getHashRateSubmission()
@@ -207,20 +207,19 @@ export class MiningSoloMiner {
   async submitWork(
     miningRequestId: number,
     randomness: string,
-    graffiti: Buffer,
+    //graffiti: Buffer,
   ): Promise<void> {
     const blockTemplate = this.miningRequestBlocks.get(miningRequestId)
     Assert.isNotUndefined(blockTemplate)
 
-    blockTemplate.header.graffiti = graffiti.toString('hex')
-    blockTemplate.header.randomness = randomness
+    blockTemplate.header.randomness = "0000000000000000"
+    blockTemplate.header.graffiti = "000000000000000000000000000000000000000000000000" + randomness
 
     const headerBytes = mineableHeaderString(blockTemplate.header)
     const hashedHeader = blake3(headerBytes)
 
     if (hashedHeader.compare(Buffer.from(blockTemplate.header.target, 'hex')) !== 1) {
       this.logger.debug('Valid block, submitting to node')
-
       const result = await this.rpc.miner.submitBlock(blockTemplate)
 
       if (result.content.added) {
